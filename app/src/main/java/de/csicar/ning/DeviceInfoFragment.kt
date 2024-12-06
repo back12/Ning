@@ -54,7 +54,7 @@ class DeviceInfoFragment : Fragment() {
         copyUtil.makeTextViewCopyable(deviceHwAddressTextView)
         copyUtil.makeTextViewCopyable(deviceVendorTextView)
 
-        viewModel.deviceDao.getById(argumentDeviceId).observe(this, Observer {
+        viewModel.deviceDao.getById(argumentDeviceId).observe(viewLifecycleOwner, Observer {
             fetchInfo(it.asDevice)
             deviceTypeTextView.text = getString(it.deviceType.label)
             deviceIpTextView.text = it.ip.hostAddress

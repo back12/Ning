@@ -12,8 +12,10 @@ import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -27,6 +29,7 @@ import de.csicar.ning.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), NetworkFragment.OnListFragmentInteractionListener {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     private val viewModel: ScanViewModel by viewModels()
     override fun onSupportNavigateUp(): Boolean {
@@ -37,7 +40,8 @@ class MainActivity : AppCompatActivity(), NetworkFragment.OnListFragmentInteract
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
         binding.drawerNavigation.setupWithNavController(navController)
         setSupportActionBar(binding.toolbar)
         appBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.deviceFragment, R.id.appPreferenceFragment))
@@ -51,7 +55,7 @@ class MainActivity : AppCompatActivity(), NetworkFragment.OnListFragmentInteract
             interfaceMenu.add("${nic.interfaceName} - ${nic.address.hostAddress}/${nic.prefix}").also {
                 it.setOnMenuItemClickListener {
                     val bundle = bundleOf("interface_name" to nic.interfaceName)
-                    findNavController(R.id.nav_host_fragment).navigate(R.id.deviceFragment, bundle)
+                    navController.navigate(R.id.deviceFragment, bundle)
                     binding.mainDrawerLayout.closeDrawers()
                     true
                 }
@@ -70,8 +74,8 @@ class MainActivity : AppCompatActivity(), NetworkFragment.OnListFragmentInteract
     }
 
 
-    override fun onListFragmentInteraction(item: DeviceWithName?, view: View) {
-        val bundle = bundleOf("deviceId" to item?.deviceId, "deviceIp" to item?.ip)
-        findNavController(R.id.nav_host_fragment).navigate(R.id.deviceInfoFragment, bundle)
+    override fun onListFragmentInteraction(item: DeviceWithName, view: View) {
+        val bundle = bundleOf("deviceId" to item.deviceId, "deviceIp" to item.ip.hostAddress)
+        navController.navigate(R.id.deviceInfoFragment, bundle)
     }
 }

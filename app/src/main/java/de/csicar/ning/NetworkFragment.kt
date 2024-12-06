@@ -149,6 +149,6 @@ class NetworkFragment : Fragment() {
     }
 
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: DeviceWithName?, view: View)
+        fun onListFragmentInteraction(item: DeviceWithName, view: View)
     }
 }
