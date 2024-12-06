@@ -46,12 +46,12 @@ class NetworkFragment : Fragment() {
         val copyUtil = CopyUtil(view)
 
 
-        viewModel.devices.observe(this, Observer {
+        viewModel.devices.observe(viewLifecycleOwner, Observer {
             emptyListInfo.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         })
 
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        viewModel.scanProgress.observe(this, Observer {
+        viewModel.scanProgress.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is ScanRepository.ScanProgress.ScanFinished -> {
                     progressBar.visibility = View.INVISIBLE

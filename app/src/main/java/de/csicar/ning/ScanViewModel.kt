@@ -27,11 +27,11 @@ class ScanViewModel(application: Application) : AndroidViewModel(application) {
     private val currentNetworkId = MutableLiveData<Long>()
     val currentScanId = MutableLiveData<Long>()
 
-    val devices = Transformations.switchMap(currentNetworkId) {
+    val devices = currentNetworkId.switchMap {
         deviceDao.getAll(it)
     }
 
-    val currentNetworks = Transformations.switchMap(currentScanId) {
+    val currentNetworks = currentScanId.switchMap {
         Log.d("asd", "netowkrsadss $it")
         networkDao.getAll(it)
     }
