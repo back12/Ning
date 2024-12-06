@@ -10,7 +10,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
@@ -42,7 +41,7 @@ class NetworkFragment : Fragment() {
         emptyListInfo = view.findViewById<View>(R.id.swipeDownViewImage)
         swipeRefreshLayout = view.findViewById(R.id.swipeDownView)
         argumentInterfaceName = arguments?.getString("interface_name")!!
-        
+
         val copyUtil = CopyUtil(view)
 
 
@@ -117,13 +116,24 @@ class NetworkFragment : Fragment() {
             })
 
         swipeRefreshLayout.setOnRefreshListener {
+            if(viewModel.scanProgress.value.isRunning) {
+                Snackbar.make(requireView(), getString(R.string.network_scan_is_currently_running), Snackbar.LENGTH_LONG).show()
+                return@setOnRefreshListener
+            }
             runScan()
         }
 
         return view
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val scanOnStartup = AppPreferences(this).startScanOnStartup
+        val scanNotStarted = viewModel.scanProgress.value == ScanRepository.ScanProgress.ScanNotStarted
+        if(scanOnStartup && scanNotStarted) {
+            runScan()
+        }
+    }
 
     private fun runScan() {
         viewModel.viewModelScope.launch {

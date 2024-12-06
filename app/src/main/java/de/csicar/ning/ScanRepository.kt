@@ -6,6 +6,7 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import de.csicar.ning.ScanRepository.ScanProgress.ScanRunning
 import de.csicar.ning.scanner.*
 import kotlinx.coroutines.*
 import java.net.Inet4Address
@@ -54,7 +55,6 @@ class ScanRepository(
                 )
             )
             withContext(Dispatchers.Main) {
-                scanProgress.value = ScanProgress.ScanNotStarted
                 scanId.value = newScanId
                 currentNetwork.value = networkId
             }
@@ -153,3 +153,7 @@ class ScanRepository(
 
 operator fun ScanRepository.ScanProgress?.plus(progress: Double): ScanRepository.ScanProgress =
     this?.plus(progress) ?: ScanRepository.ScanProgress.ScanRunning(progress)
+
+
+val ScanRepository.ScanProgress?.isRunning : Boolean
+    get() = this is ScanRunning

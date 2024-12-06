@@ -23,7 +23,7 @@ class ScanViewModel(application: Application) : AndroidViewModel(application) {
         portDao,
         application
     )
-    val scanProgress by lazy { MutableLiveData<ScanRepository.ScanProgress>() }
+    val scanProgress by lazy { MutableLiveData<ScanRepository.ScanProgress>(ScanRepository.ScanProgress.ScanNotStarted) }
     private val currentNetworkId = MutableLiveData<Long>()
     val currentScanId = MutableLiveData<Long>()
 

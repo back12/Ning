@@ -17,6 +17,8 @@
     <string name="title_open_ports">Open Ports:</string>
     <string name="this_device">This device</string>
     <string name="error_network_not_found">Network not found</string>
+    <string name="network_scan_is_currently_running">Network scan is currently running</string>
+    <string name="startScanOnStartup">Start scan on startup</string>
     <string name="hideMacAddressDetails">Hide MAC Address Details</string>
     <string name="device_type_pc">PC</string>
     <string name="device_type_vm">Virtual machine</string>
