@@ -21,7 +21,7 @@ class CopyUtil(val rootView: View) {
     fun copyText(text: String): Boolean {
         val clipboard = rootView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(text, text)
-        clipboard?.setPrimaryClip(clip)
+        clipboard.setPrimaryClip(clip)
         val snackbar = Snackbar.make(rootView, getMessageForText(text), Snackbar.LENGTH_LONG)
         snackbar.show()
         return true

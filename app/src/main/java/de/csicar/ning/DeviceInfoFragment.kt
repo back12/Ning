@@ -54,7 +54,7 @@ class DeviceInfoFragment : Fragment() {
         copyUtil.makeTextViewCopyable(deviceHwAddressTextView)
         copyUtil.makeTextViewCopyable(deviceVendorTextView)
 
-        viewModel.deviceDao.getById(argumentDeviceId).observe(viewLifecycleOwner, Observer {
+        viewModel.deviceDao.getById(argumentDeviceId).observe(viewLifecycleOwner) {
             fetchInfo(it.asDevice)
             deviceTypeTextView.text = getString(it.deviceType.label)
             deviceIpTextView.text = it.ip.hostAddress
@@ -66,7 +66,7 @@ class DeviceInfoFragment : Fragment() {
             deviceHwAddressTextView.text =
                 it.hwAddress?.getAddress(AppPreferences(this).hideMacDetails)
             deviceVendorTextView.text = it.vendorName
-        })
+        }
 
         val ports = viewModel.portDao.getAllForDevice(argumentDeviceId)
 

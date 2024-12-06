@@ -128,7 +128,7 @@ class ScanRepository(
     private fun getWifiConnectionInfo(context: Context): WifiInfo? {
         val mWifiManager = (context.applicationContext
             .getSystemService(Context.WIFI_SERVICE) as WifiManager)
-        return mWifiManager?.connectionInfo
+        return mWifiManager.connectionInfo
     }
 
 

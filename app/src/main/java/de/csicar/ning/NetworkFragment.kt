@@ -46,25 +46,27 @@ class NetworkFragment : Fragment() {
         val copyUtil = CopyUtil(view)
 
 
-        viewModel.devices.observe(viewLifecycleOwner, Observer {
+        viewModel.devices.observe(viewLifecycleOwner) {
             emptyListInfo.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
-        })
+        }
 
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        viewModel.scanProgress.observe(viewLifecycleOwner, Observer {
+        viewModel.scanProgress.observe(viewLifecycleOwner) {
             when (it) {
                 is ScanRepository.ScanProgress.ScanFinished -> {
                     progressBar.visibility = View.INVISIBLE
                     swipeRefreshLayout.isRefreshing = false
                 }
+
                 is ScanRepository.ScanProgress.ScanRunning -> {
                     progressBar.visibility = View.VISIBLE
                     progressBar.progress = (it.progress * 1000.0).roundToInt()
                 }
+
                 is ScanRepository.ScanProgress.ScanNotStarted -> progressBar.visibility =
                     View.INVISIBLE
             }
-        })
+        }
 
         val devicesList = view.findViewById<RecyclerViewCommon>(R.id.devicesList)
         devicesList.setHandler(
@@ -104,7 +106,7 @@ class NetworkFragment : Fragment() {
                 }
 
                 override fun onLongClickListener(view: View, value: DeviceWithName): Boolean {
-                    return copyUtil.copyText(value.ip.hostAddress)
+                    return value.ip.hostAddress?.let(copyUtil::copyText) ?: false
                 }
 
                 override fun shareIdentity(a: DeviceWithName, b: DeviceWithName) =
